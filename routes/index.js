@@ -23,23 +23,24 @@ var payload = {
         }
     ],
     "restaurant": {
-        "logo": "http://example.com/images/pizza.png",
-        "name": "Pizza R Us",
-        "yelp_link": "https://yelp.com/pizza-r-us"
+        "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
+        "name": "Tony’s Pizza Napoletana",
+        "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
     }
 }
 
 
-
-
-
 // ---------------------------------
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('hit')
-  res.render('index.ejs', {user: 'kevin', title:'homepage'});
+
+  res.render('index.ejs', {
+    user: payload.restaurant.name, 
+    logo: payload.restaurant.logo,
+    title:'Rating Pizza', 
+    link: payload.restaurant.yelp_link
+    });
 });
 
 
@@ -53,9 +54,15 @@ router.get('/sendEmail', function(req, res, next) {
         }
     });
 
-    // sending the html template as email 
-    ejs.renderFile('./views/index.ejs', {user:"great user", title:"homepage"}, 
-        function( err, data) {
+    // sending the ejs template as email 
+    ejs.renderFile('./views/index.ejs',
+        {
+        user: payload.restaurant.name, 
+        logo: payload.restaurant.logo,
+        title:'Rating Pizza', 
+        link: payload.restaurant.yelp_link
+        }, 
+        function(err, data) {
             if(err) {
                 console.log(err);
             } else {
@@ -75,8 +82,7 @@ router.get('/sendEmail', function(req, res, next) {
                 });
             }
         })
-    res.render('index', {user: "Great User",title:"homepage"})
-
+    res.send('Email send!')
 })
 
 
