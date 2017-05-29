@@ -36,10 +36,11 @@ var payload = {
 router.get('/', function(req, res, next) {
 
   res.render('index.ejs', {
-    user: payload.restaurant.name, 
-    logo: payload.restaurant.logo,
+    user: payload.members[0].name,
     title:'Rating Pizza', 
-    link: payload.restaurant.yelp_link
+    restaurantName: payload.restaurant.name, 
+    restaurantLogo: payload.restaurant.logo,
+    restaurantLink: payload.restaurant.yelp_link
     });
 });
 
@@ -57,17 +58,18 @@ router.get('/sendEmail', function(req, res, next) {
     // sending the ejs template as email 
     ejs.renderFile('./views/index.ejs',
         {
-        user: payload.restaurant.name, 
-        logo: payload.restaurant.logo,
+        user: payload.members[0].name,
         title:'Rating Pizza', 
-        link: payload.restaurant.yelp_link
+        restaurantName: payload.restaurant.name, 
+        restaurantLogo: payload.restaurant.logo,
+        restaurantLink: payload.restaurant.yelp_link
         }, 
         function(err, data) {
             if(err) {
                 console.log(err);
             } else {
                 // setup email data with unicode symbols
-                let mailOptions = {
+                let mailOptions = { 
                     from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
                     to: 'kkwok_wai@hotmail.com', // list of receivers
                     subject: 'welcome to nodemailer', // Subject line
