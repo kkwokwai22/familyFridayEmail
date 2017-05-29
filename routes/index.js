@@ -29,12 +29,11 @@ var payload = {
     }
 }
 
-
 // ---------------------------------
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
+  
   res.render('index.ejs', {
     user: payload.members[0].name,
     title:'Rating Pizza', 
