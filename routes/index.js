@@ -7,17 +7,17 @@ var fs = require('fs');
 var payload = {
     "members": [
         {
-            "email": "jill@mycompany.com",
+            "email": "kkwok_wai@hotmail.com",
             "name": "Jill",
             "team": "engineering"
         },
         {
-            "email": "rohit@mycompany.com",
+            "email": "kkwok_wai@hotmail.com",
             "name": "Rohit",
             "team": "finance"
         },
         {
-            "email": "maria@mycompany.com",
+            "email": "kkwok_wai@hotmail.com",
             "name": "Maria",
             "team": "operations"
         }
@@ -39,7 +39,8 @@ router.get('/', function(req, res, next) {
     title:'Rating Pizza', 
     restaurantName: payload.restaurant.name, 
     restaurantLogo: payload.restaurant.logo,
-    restaurantLink: payload.restaurant.yelp_link
+    restaurantLink: payload.restaurant.yelp_link,
+    team: payload.members[0].team
     });
 });
 
@@ -54,37 +55,41 @@ router.get('/sendEmail', function(req, res, next) {
         }
     });
 
-    // sending the ejs template as email 
-    ejs.renderFile('./views/index.ejs',
-        {
-        user: payload.members[0].name,
-        title:'Rating Pizza', 
-        restaurantName: payload.restaurant.name, 
-        restaurantLogo: payload.restaurant.logo,
-        restaurantLink: payload.restaurant.yelp_link
-        }, 
-        function(err, data) {
-            if(err) {
-                console.log(err);
-            } else {
-                // setup email data with unicode symbols
-                let mailOptions = { 
-                    from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
-                    to: 'kkwok_wai@hotmail.com', // list of receivers
-                    subject: 'welcome to nodemailer', // Subject line
-                    text: 'Testing with Kevin!', // plain text body
-                    html: data// html body
-                };
-                transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
+    for(var i = 0; i <= payload.members.length; i++) {
+        ejs.renderFile('./views/index.ejs',
+            {
+            user: payload.members[i].name,
+            title:'Rating Pizza', 
+            restaurantName: payload.restaurant.name, 
+            restaurantLogo: payload.restaurant.logo,
+            restaurantLink: payload.restaurant.yelp_link,
+            team: payload.members[i].team
+            }, 
+            function(err, data) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    // setup email data with unicode symbols
+                    let mailOptions = { 
+                        from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
+                        to: payload.members[i].email, // list of receivers
+                        subject: 'welcome to nodemailer', // Subject line
+                        text: 'Testing with Kevin!', // plain text body
+                        html: data// html body
+                    };
+                    transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                    });
                 }
-                console.log('Message %s sent: %s', info.messageId, info.response);
-                });
-            }
-        })
-    res.send('Email send!')
-})
+            })
+        console.log('send it 3 email');
+    }
+    console.log('problem')
+    res.send('send those email');
+});
 
 
 module.exports = router;
