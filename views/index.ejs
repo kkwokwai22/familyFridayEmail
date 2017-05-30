@@ -2,13 +2,17 @@
 <html>
   <head><title><%= title %></title></head>
   <body>
+    <h2>Dear: <%= user%></h2>
+    <h3>Team: <%= team%></h3>
+    <div>
+    	<img src="<%= backgroundImage %>" style='width:20%' alt="background">	
+    </div>
     <div>
     <h1><%= restaurantName%></h1>
      <img src="<%= restaurantLogo %>" style='width:20%' alt="Pizza">
 	<p><a href="<%= restaurantLink %>" class="btn btn-primary" role="button">Yelp Link</a></p>
     </div>
-    <h2>Dear: <%= user%></h2>
-    <h3>Team: <%= team%></h3>
+    <h2><%= description%></h2> 
   </body>
 </html>
 
