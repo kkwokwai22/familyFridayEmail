@@ -1,18 +1,82 @@
 <!DOCTYPE html>
 <html>
-  <head><title><%= title %></title></head>
+  <head>
+  <title><%= title %></title>
+  <style>
+  .wrapper {
+  	width: 640px;
+  	margin: 0 auto;
+  	background-color: #efefef;
+  }
+
+  h1 {
+  	color:#89CFF0;
+  	text-align: center;
+  }
+
+  .teamImageWrapper {
+  	max-height: 250px;
+	overflow: hidden;
+  }
+  .teamImage {
+  	width: 100%;
+  }
+  
+  .teamFont {
+  	color: Green;
+  }
+
+  .restaurantFont {
+  	color: Red;
+  }
+
+  .restaurantImageStyle {
+	width: 40%;
+  }
+
+  .feedbackFont {
+  	margin: 15px;
+  	padding: 20px;
+  }
+
+  p {
+  	text-align: center;
+  	line-height: 1.45em;
+  	font-family: arial;
+  	background: #eee;
+  }
+  
+  </style>
+  </head>
   <body>
-    <h2>Dear: <%= user%></h2>
-    <h3>Team: <%= team%></h3>
-    <div>
-    	<img src="<%= backgroundImage %>" style='width:20%' alt="background">	
+  <div class='wrapper'>
+    <h1 class='feedbackFont'>We Love Feelback!</h1>
+    <div class='teamImageWrapper'> 
+    	<img class='teamImage' src="<%= backgroundImage%>" alt="background">	
+    </div>
+	<h2>Dear: <%= user%>,</h2>
+    <p>Remember last friday that the whole company went to <span class='restaurantFont'><%= restaurantName%></span> I hope you like it! Please vote yes or no below so we can see if we should go back again!<br>Thanks <%= user%>.</p>
+	<div>
+    <h3>Thank you always for making the <span class='teamFont'><%= team%></span> team great!</h3>
     </div>
     <div>
-    <h1><%= restaurantName%></h1>
-     <img src="<%= restaurantLogo %>" style='width:20%' alt="Pizza">
+     <img class='restaurantImageStyle' src="<%= restaurantLogo %>" alt="Pizza">
 	<p><a href="<%= restaurantLink %>" class="btn btn-primary" role="button">Yelp Link</a></p>
     </div>
-    <h2><%= description%></h2> 
+    <form method='POST' action='/'>
+    <div style='text-align: center; margin: 30px;'>
+    	<span style='font-size: 16px'>
+		<a href='https://www.google.com'>
+			<img src='https://help.getfeedback.com/customer/portal/attachments/306661' width='60'>
+		</a>
+		<a href='https://www.google.com'>
+			<img src='https://help.getfeedback.com/customer/portal/attachments/306657' width='60'>
+		</a>
+		</span>
+    </div>
+    </form>
+   </div>
   </body>
 </html>
+
 
