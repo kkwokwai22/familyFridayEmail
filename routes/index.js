@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
 var ejs = require('ejs')
-var fs = require('fs');
 
 // The given information (expect this to be a api or query from database)
 var payload = {
@@ -45,11 +44,11 @@ var teamDetails =  {
     },
     "finance": {
         'backgroundImage':'https://www.western.edu/sites/default/files/finance_header2.jpg',
-        'description': 'hey finance people'
+        'description': 'hey finance people thank you for always keeping us safe'
     },
     "engineering": {
         'backgroundImage':'https://engineeringinterviewquestions.com/wp-content/uploads/2016/01/engineering-qa.jpg',
-        'description': 'you are in the engineering team please '
+        'description': 'you are in the engineering team please teach me to solve better problem'
     },
     'general': {
         'backgroundImage': 'http://www.kcc.edu/campaigns/PublishingImages/poh.jpg'
@@ -60,23 +59,27 @@ var teamDetails =  {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home.ejs')
+  res.render('home.ejs', {info: payload})
 });
 
 
 // hitting this route will invoker the sendEmailTemplate function with the given payload
 router.get('/sendEmail', function(req, res, next) {
+
     if(payload) {
-        sendEmailTemplate(payload);
+        sendEmailTemplate(payload); 
+    } else {
+        res.redirect('/')
     }
 });
 
 // The sendEmailTemplate function is use for sending Email base on the given payload
 function sendEmailTemplate(informationOfMember, callback) {
-    // // if payload not given function will exit
-    console.log(informationOfMember)
+    
+
+    // if payload not given function will exit
     if(!informationOfMember) {
-        res.redirect('back');
+        return;
     }
 
 
@@ -93,7 +96,6 @@ function sendEmailTemplate(informationOfMember, callback) {
     var member = informationOfMember.members
     // given the varaible restaurant to shorten object informationOfMember
     var restaurant = informationOfMember.restaurant
-
     // Loop through the payload and send email
     for(let i = 0; i <= member.length; i++) {
 
@@ -120,7 +122,7 @@ function sendEmailTemplate(informationOfMember, callback) {
             backgroundImage: specificTeam,
             team: member[i].team
             }, 
-            // callback (making sure the ejs finish rendering the data)
+            // callback (making sure the ejs finish rendering the info and then send down as data)
             function(err, data) {
                 if(err) {
                     console.log(err);
@@ -142,7 +144,7 @@ function sendEmailTemplate(informationOfMember, callback) {
                     console.log('Message %s sent: %s', info.messageId, info.response);
                     });
                 }
-            })
+        })
     }
 }
 
