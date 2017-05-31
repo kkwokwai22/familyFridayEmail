@@ -4,7 +4,6 @@ var nodemailer = require('nodemailer');
 var mongoose = require('mongoose');
 var ejs = require('ejs')
 var fs = require('fs');
-// var Schema = mongoose.Schema;
 
 var payload = {
     "members": [
@@ -53,49 +52,31 @@ var teamDetails =  {
 // ---------------------------------
 
 /* GET home page. */
-
-// var userSchema = new Schema({
-//   rating: Number,
-//   name: String
-// });
-
-// var userRating = mongoose.model('userSchema', userSchema);
-
-// router.post('/userRating', function(req, res, next) {
-//     userRating.create({
-//         rating: req.body.rating,
-//         name: req.body.name
-//     }, function(err) {
-//         if(err) {
-//             console.log(err)
-//         } else {
-//             res.render('userRating.ejs')
-//         }
-//     })
-// });
-
-
-// ---------------------------------
-
 router.get('/', function(req, res, next) {
   
-  res.render('index.ejs', {
-    user: payload.members[0].name,
-    title:'Rating Pizza', 
-    restaurantName: payload.restaurant.name, 
-    restaurantLogo: payload.restaurant.logo,
-    restaurantLink: payload.restaurant.yelp_link,
-    team: payload.members[0].team,
-    backgroundImage: teamDetails.operations.backgroundImage
-    });
+  // res.render('index.ejs', {
+  //   user: payload.members[0].name,
+  //   title:'Rating Pizza', 
+  //   restaurantName: payload.restaurant.name, 
+  //   restaurantLogo: payload.restaurant.logo,
+  //   restaurantLink: payload.restaurant.yelp_link,
+  //   team: payload.members[0].team,
+  //   backgroundImage: teamDetails.operations.backgroundImage
+  //   });
+  res.render('home.ejs')
 });
 
 router.get('/sendEmail', function(req, res, next) {
-    sendEmailTemplate();
-    res.send('sendEmail');
+    sendEmailTemplate(payload, function(err, data){
+        if(err) {
+            console.log(err)
+        } else {
+            res.send('good job')
+        }
+    });
 });
 
-function sendEmailTemplate() {
+function sendEmailTemplate(informationOfMember, callback) {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -105,53 +86,53 @@ function sendEmailTemplate() {
         }
     });
 
-for(var i = 0; i <= payload.members.length; i++) {
-    var specificTeam = null
-    if(payload.members[i].team === 'operations') {
-        console.log('hit operations');
-        specificTeam = teamDetails.operations.backgroundImage
-    } else if (payload.members[i].team === 'engineering') {
-        console.log('hit engineering');
+    const member = informationOfMember.members
+    const restaurant = informationOfMember.restaurant
 
-        specificTeam = teamDetails.engineering.backgroundImage
-    } else if (payload.members[i].team === 'finance') {
-        console.log('hit finance');
-        specificTeam = teamDetails.finance.backgroundImage 
-    } else {
-        specificTeam = null
-    }
+    for(var i = 0; i <= member.length; i++) {
+        var specificTeam = null
+        if(member[i].team === 'operations') {
+            specificTeam = teamDetails.operations.backgroundImage
+        } else if (member[i].team === 'engineering') {
+            specificTeam = teamDetails.engineering.backgroundImage
+        } else if (member[i].team === 'finance') {
+            specificTeam = teamDetails.finance.backgroundImage 
+        } else {
+            console.log('hitting');
+            specificTeam = null
+        }
 
-    ejs.renderFile('./views/index.ejs',
-        {
-        user: payload.members[i].name,
-        title:'Rating Pizza', 
-        restaurantName: payload.restaurant.name, 
-        restaurantLogo: payload.restaurant.logo,
-        restaurantLink: payload.restaurant.yelp_link,
-        backgroundImage: specificTeam,
-        team: payload.members[i].team
-        }, 
-        function(err, data) {
-            if(err) {
-                console.log(err);
-            } else {
-                // setup email data with unicode symbols
-                let mailOptions = { 
-                    from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
-                    to: payload.members[i].email, // list of receivers
-                    subject: 'welcome to nodemailer', // Subject line
-                    text: 'Testing with Kevin!', // plain text body
-                    html: data// html body
-                };
+        ejs.renderFile('./views/index.ejs',
+            {
+            user: member[i].name,
+            title:'Rating Pizza', 
+            restaurantName: restaurant.name, 
+            restaurantLogo: restaurant.logo,
+            restaurantLink: restaurant.yelp_link,
+            backgroundImage: specificTeam,
+            team: member[i].team
+            }, 
+            function(err, data) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    // setup email data with unicode symbols
+                    let mailOptions = { 
+                        from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
+                        to: member[i].email, // list of receivers
+                        subject: 'welcome to nodemailer', // Subject line
+                        text: 'Testing with Kevin!', // plain text body
+                        html: data// html body
+                    };
 
-                transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
+                    transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                    });
                 }
-                console.log('Message %s sent: %s', info.messageId, info.response);
-                });
-            }
-        })
+            })
     }
 }
 
