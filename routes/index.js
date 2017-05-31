@@ -1,36 +1,43 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
-var mongoose = require('mongoose');
 var ejs = require('ejs')
 var fs = require('fs');
 
-var payload = {
-    "members": [
-        {
-            "email": "kkwok_wai@hotmail.com",
-            "name": "Jill",
-            "team": "engineering"
-        },
-        {
-            "email": "kkwokwai22@gmail.com",
-            "name": "Rohit",
-            "team": "finance"
-        },
-        {
-            "email": "kkwok_wai@hotmail.com",
-            "name": "Maria",
-            "team": "operations"
-        }
-    ],
+// The given information (expect this to be a api or query from database)
+// var payload = {
+//     "members": [
+//         {
+//             "email": "kkwok_wai@hotmail.com",
+//             "name": "Jill",
+//             "team": "engineering"
+//         },
+//         {
+//             "email": "kkwokwai22@gmail.com",
+//             "name": "Rohit",
+//             "team": "finance"
+//         },
+//         {
+//             "email": "kkwok_wai@hotmail.com",
+//             "name": "Maria",
+//             "team": "operations"
+//         },
+//         {
+//             "email": "kkwokwai22@gmail.com",
+//             "name": "General",
+//             "team": ""
+//         }
+//     ],
 
-    "restaurant": {
-        "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
-        "name": "Tony’s Pizza Napoletana",
-        "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
-    },
-}
+//     "restaurant": {
+//         "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
+//         "name": "Tony’s Pizza Napoletana",
+//         "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
+//     },
+// }
 
+
+// targetting information for specific team member
 var teamDetails =  {
     "operations": {
         'backgroundImage': "http://www.channel4.com/explore/surgerylive/images/team2.jpg",
@@ -45,7 +52,7 @@ var teamDetails =  {
         'description': 'you are in the engineering team please '
     },
     'general': {
-        'backgroundImage': ''
+        'backgroundImage': 'http://www.kcc.edu/campaigns/PublishingImages/poh.jpg'
     }
 }
 
@@ -66,17 +73,21 @@ router.get('/', function(req, res, next) {
   res.render('home.ejs')
 });
 
+
+// hitting this route will invoker the sendEmailTemplate function with the given payload
 router.get('/sendEmail', function(req, res, next) {
-    sendEmailTemplate(payload, function(err, data){
-        if(err) {
-            console.log(err)
-        } else {
-            res.send('good job')
-        }
-    });
+    sendEmailTemplate(payload);
 });
 
+// The sendEmailTemplate function is use for sending Email base on the given payload
 function sendEmailTemplate(informationOfMember, callback) {
+    // if payload not given function will exit
+    if(informationOfMember) {
+        console.log('hit')
+        res.redirect('back');
+    }
+
+
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -86,10 +97,15 @@ function sendEmailTemplate(informationOfMember, callback) {
         }
     });
 
-    const member = informationOfMember.members
-    const restaurant = informationOfMember.restaurant
+    // given the varaible member to shorten object informationOfMemeber
+    var member = informationOfMember.members
+    // given the varaible restaurant to shorten object informationOfMember
+    var restaurant = informationOfMember.restaurant
 
-    for(var i = 0; i <= member.length; i++) {
+    // Loop through the payload and send email
+    for(let i = 0; i <= member.length; i++) {
+
+        // check the condition of each email recipent and give them a different background to attract them 
         var specificTeam = null
         if(member[i].team === 'operations') {
             specificTeam = teamDetails.operations.backgroundImage
@@ -98,10 +114,10 @@ function sendEmailTemplate(informationOfMember, callback) {
         } else if (member[i].team === 'finance') {
             specificTeam = teamDetails.finance.backgroundImage 
         } else {
-            console.log('hitting');
-            specificTeam = null
+            specificTeam = teamDetails.general.backgroundImage
         }
 
+        // The ejs (data) to send to email 
         ejs.renderFile('./views/index.ejs',
             {
             user: member[i].name,
@@ -112,11 +128,12 @@ function sendEmailTemplate(informationOfMember, callback) {
             backgroundImage: specificTeam,
             team: member[i].team
             }, 
+            // callback (making sure the ejs finish rendering the data)
             function(err, data) {
                 if(err) {
                     console.log(err);
                 } else {
-                    // setup email data with unicode symbols
+                    // final set up of email data before sending out
                     let mailOptions = { 
                         from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
                         to: member[i].email, // list of receivers
@@ -125,6 +142,7 @@ function sendEmailTemplate(informationOfMember, callback) {
                         html: data// html body
                     };
 
+                    // sending out the email
                     transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
                         return console.log(error);
