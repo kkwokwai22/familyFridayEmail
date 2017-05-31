@@ -17,27 +17,27 @@ payload example - (from apartmentlist)
 var payload = {
     "members": [
         {
-            "email": "kkwok_wai@hotmail.com",
+            "email": "example@hotmail.com",
             "name": "Jill",
             "team": "engineering"
         },
         {
-            "email": "kkwokwai22@gmail.com",
+            "email": "example@gmail.com",
             "name": "Rohit",
             "team": "finance"
         },
         {
-            "email": "kkwok_wai@hotmail.com",
+            "email": "example@hotmail.com",
             "name": "Maria",
             "team": "operations"
         },
         {
-            "email": "kkwokwai22@gmail.com",
+            "email": "example@gmail.com",
             "name": "General",
             "team": ""
         },
         {
-            "email": "kkwokwai22@gmail.com",
+            "email": "example@gmail.com",
             "name": "Jackie",
             "team": "engineering"
         }
