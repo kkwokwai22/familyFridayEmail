@@ -1,18 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
-var ejs = require('ejs')
+var ejs = require('ejs');
+var url = require('url');
 
 // The given information (expect this to be a api or query from database)
 var payload = {
     "members": [
         {
-            "email": "example@hotmail.com",
-            "name": "Jill",
+            "email": "jake@apartmentlist.com",
+            "name": "jake",
             "team": "engineering"
         },
         {
-            "email": "example@gmail.com",
+            "email": "kkwokwai22@gmail.com",
             "name": "Rohit",
             "team": "finance"
         },
@@ -77,6 +78,17 @@ router.get('/sendEmail', function(req, res, next) {
         } 
     });
     res.send('Email Send!!')
+});
+
+router.get('/voteUserData', function(req, res, next){
+
+    console.log(req.query)
+    
+    var userDataScore = req.query.pizzaScore
+    var user = req.query.member
+    
+    console.log(userDataScore);
+    console.log(user); 
 });
 
 // The sendEmailTemplate function is use for sending Email base on the given payload
