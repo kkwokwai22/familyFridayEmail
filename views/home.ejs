@@ -3,12 +3,31 @@
 <head>
 	<title>home</title>
 </head>
+<style>
+.wrapper {
+	width: 940px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.nameInfo {
+	margin: 20px;
+	list-style: none;
+}
+</style>
 <body>
-	<h1>Welcome!!</h1>
-	<h3>Base on the payload you gave me</h3>
-	<p>We have</p>
-	<form action="/sendEmail">
-    	<input type="submit" value="send Email" />
-	</form>
+	<div class='wrapper'>
+		<h1>Welcome!!</h1>
+		<h3>Base on the payload you gave me</h3>
+		<p>We have <%= info.members.length%> of Member in the list</p>
+		<div class='nameInfo'>
+			<% for(var i=0; i<info.members.length; i++) {%>
+	   			<li><%= info.members[i].name %></li>
+			<% } %>
+		</div>
+		<form action="/sendEmail">
+	    	<input type="submit" value="send Email" />
+		</form>
+	</div>
 </body>
 </html>
