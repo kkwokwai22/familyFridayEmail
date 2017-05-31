@@ -50,6 +50,16 @@ var payload = {
     }
 }
 
+------------ The getFeedback log in ------------- 
+
+https://www.getfeedback.com/ 
+
+log to see the feedback information
+
+promptesting@gmail.com 
+pw: testing111
+
+
 ------------ My step of appoaching the problem -------------
  
 1. first trying to figure out the apartment prompt 
