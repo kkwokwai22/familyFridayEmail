@@ -25,6 +25,11 @@ var payload = {
             "email": "kkwokwai22@gmail.com",
             "name": "General",
             "team": ""
+        },
+        {
+            "email": "kkwokwai22@gmail.com",
+            "name": "Jackie",
+            "team": "engineering"
         }
     ],
 
@@ -66,22 +71,21 @@ router.get('/', function(req, res, next) {
 // hitting this route will invoker the sendEmailTemplate function with the given payload
 router.get('/sendEmail', function(req, res, next) {
 
-    if(payload) {
-        sendEmailTemplate(payload); 
-    } else {
-        res.redirect('/')
-    }
+    sendEmailTemplate(payload, function(err) {
+        if(err) {
+            console.log(err)
+        } 
+    });
+    res.send('Email Send!!')
 });
 
 // The sendEmailTemplate function is use for sending Email base on the given payload
 function sendEmailTemplate(informationOfMember, callback) {
     
-
     // if payload not given function will exit
     if(!informationOfMember) {
         return;
     }
-
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -93,19 +97,19 @@ function sendEmailTemplate(informationOfMember, callback) {
     });
 
     // given the varaible member to shorten object informationOfMember
-    var member = informationOfMember.members
+    var members = informationOfMember.members
     // given the varaible restaurant to shorten object informationOfMember
     var restaurant = informationOfMember.restaurant
     // Loop through the payload and send email
-    for(let i = 0; i <= member.length; i++) {
-
+    for(let i = 0; i < members.length; i++) {
         // check the condition of each email recipent and give them a different background to attract them 
         var specificTeam = null
-        if(member[i].team === 'operations') {
+        var member = members[i];
+        if(member.team === 'operations') {
             specificTeam = teamDetails.operations.backgroundImage
-        } else if (member[i].team === 'engineering') {
+        } else if (member.team === 'engineering') {
             specificTeam = teamDetails.engineering.backgroundImage
-        } else if (member[i].team === 'finance') {
+        } else if (member.team === 'finance') {
             specificTeam = teamDetails.finance.backgroundImage 
         } else {
             specificTeam = teamDetails.general.backgroundImage
@@ -114,13 +118,13 @@ function sendEmailTemplate(informationOfMember, callback) {
         // The ejs (data) to send to email 
         ejs.renderFile('./views/index.ejs',
             {
-            user: member[i].name,
+            user: member.name,
             title:'Rating Pizza', 
             restaurantName: restaurant.name, 
             restaurantLogo: restaurant.logo,
             restaurantLink: restaurant.yelp_link,
             backgroundImage: specificTeam,
-            team: member[i].team
+            team: member.team
             }, 
             // callback (making sure the ejs finish rendering the info and then send down as data)
             function(err, data) {
@@ -130,8 +134,8 @@ function sendEmailTemplate(informationOfMember, callback) {
                     // final set up of email data before sending out
                     let mailOptions = { 
                         from: '"Kevin Wong 👻" <prompttesting@gmail.com>', // sender address
-                        to: member[i].email, // list of receivers
-                        subject: 'welcome to nodemailer', // Subject line
+                        to: member.email, // list of receivers
+                        subject: 'Thank you for joining us Friday ', // Subject line
                         text: 'Testing with Kevin!', // plain text body
                         html: data// html body
                     };
@@ -142,8 +146,8 @@ function sendEmailTemplate(informationOfMember, callback) {
                         return console.log(error);
                     }
                     console.log('Message %s sent: %s', info.messageId, info.response);
-                    });
-                }
+                });
+            }
         })
     }
 }
