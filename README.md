@@ -14,7 +14,7 @@ payload is located at index.js -- and is run by the sendEmailTemplate function
 
 payload example - (from apartmentlist) 
 
-var payload = {
+{
     "members": [
         {
             "email": "example@hotmail.com",
