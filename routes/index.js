@@ -5,36 +5,36 @@ var ejs = require('ejs')
 var fs = require('fs');
 
 // The given information (expect this to be a api or query from database)
-// var payload = {
-//     "members": [
-//         {
-//             "email": "kkwok_wai@hotmail.com",
-//             "name": "Jill",
-//             "team": "engineering"
-//         },
-//         {
-//             "email": "kkwokwai22@gmail.com",
-//             "name": "Rohit",
-//             "team": "finance"
-//         },
-//         {
-//             "email": "kkwok_wai@hotmail.com",
-//             "name": "Maria",
-//             "team": "operations"
-//         },
-//         {
-//             "email": "kkwokwai22@gmail.com",
-//             "name": "General",
-//             "team": ""
-//         }
-//     ],
+var payload = {
+    "members": [
+        {
+            "email": "kkwok_wai@hotmail.com",
+            "name": "Jill",
+            "team": "engineering"
+        },
+        {
+            "email": "kkwokwai22@gmail.com",
+            "name": "Rohit",
+            "team": "finance"
+        },
+        {
+            "email": "kkwok_wai@hotmail.com",
+            "name": "Maria",
+            "team": "operations"
+        },
+        {
+            "email": "kkwokwai22@gmail.com",
+            "name": "General",
+            "team": ""
+        }
+    ],
 
-//     "restaurant": {
-//         "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
-//         "name": "Tony’s Pizza Napoletana",
-//         "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
-//     },
-// }
+    "restaurant": {
+        "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
+        "name": "Tony’s Pizza Napoletana",
+        "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
+    }
+}
 
 
 // targetting information for specific team member
@@ -60,30 +60,22 @@ var teamDetails =  {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  
-  // res.render('index.ejs', {
-  //   user: payload.members[0].name,
-  //   title:'Rating Pizza', 
-  //   restaurantName: payload.restaurant.name, 
-  //   restaurantLogo: payload.restaurant.logo,
-  //   restaurantLink: payload.restaurant.yelp_link,
-  //   team: payload.members[0].team,
-  //   backgroundImage: teamDetails.operations.backgroundImage
-  //   });
   res.render('home.ejs')
 });
 
 
 // hitting this route will invoker the sendEmailTemplate function with the given payload
 router.get('/sendEmail', function(req, res, next) {
-    sendEmailTemplate(payload);
+    if(payload) {
+        sendEmailTemplate(payload);
+    }
 });
 
 // The sendEmailTemplate function is use for sending Email base on the given payload
 function sendEmailTemplate(informationOfMember, callback) {
-    // if payload not given function will exit
-    if(informationOfMember) {
-        console.log('hit')
+    // // if payload not given function will exit
+    console.log(informationOfMember)
+    if(!informationOfMember) {
         res.redirect('back');
     }
 
@@ -97,7 +89,7 @@ function sendEmailTemplate(informationOfMember, callback) {
         }
     });
 
-    // given the varaible member to shorten object informationOfMemeber
+    // given the varaible member to shorten object informationOfMember
     var member = informationOfMember.members
     // given the varaible restaurant to shorten object informationOfMember
     var restaurant = informationOfMember.restaurant
