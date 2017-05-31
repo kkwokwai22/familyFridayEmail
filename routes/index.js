@@ -4,41 +4,41 @@ var nodemailer = require('nodemailer');
 var ejs = require('ejs')
 
 // The given information (expect this to be a api or query from database)
-var payload = {
-    "members": [
-        {
-            "email": "example@hotmail.com",
-            "name": "Jill",
-            "team": "engineering"
-        },
-        {
-            "email": "example@gmail.com",
-            "name": "Rohit",
-            "team": "finance"
-        },
-        {
-            "email": "example@hotmail.com",
-            "name": "Maria",
-            "team": "operations"
-        },
-        {
-            "email": "example@gmail.com",
-            "name": "General",
-            "team": ""
-        },
-        {
-            "email": "example@gmail.com",
-            "name": "Jackie",
-            "team": "engineering"
-        }
-    ],
+// var payload = {
+//     "members": [
+//         {
+//             "email": "example@hotmail.com",
+//             "name": "Jill",
+//             "team": "engineering"
+//         },
+//         {
+//             "email": "example@gmail.com",
+//             "name": "Rohit",
+//             "team": "finance"
+//         },
+//         {
+//             "email": "example@hotmail.com",
+//             "name": "Maria",
+//             "team": "operations"
+//         },
+//         {
+//             "email": "example@gmail.com",
+//             "name": "General",
+//             "team": ""
+//         },
+//         {
+//             "email": "example@gmail.com",
+//             "name": "Jackie",
+//             "team": "engineering"
+//         }
+//     ],
 
-    "restaurant": {
-        "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
-        "name": "Tony’s Pizza Napoletana",
-        "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
-    }
-}
+//     "restaurant": {
+//         "logo": "https://s3-media2.fl.yelpcdn.com/bphoto/F_dgemfinYzY9nrZ_xfeGw/o.jpg",
+//         "name": "Tony’s Pizza Napoletana",
+//         "yelp_link": "https://www.yelp.com/biz/tonys-pizza-napoletana-san-francisco?osq=best+pizza"
+//     }
+// }
 
 
 // targetting information for specific team member
@@ -151,6 +151,7 @@ function sendEmailTemplate(informationOfMember, callback) {
         })
     }
 }
+
 
 
 module.exports = router;
